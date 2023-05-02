@@ -1,7 +1,37 @@
-import { View, TextInput, StyleSheet } from "react-native";
-import PrimaryButton from "../Components/PrimaryButton";
+import { View, TextInput, StyleSheet, Alert } from "react-native";
+import PrimaryButton from "../Components/UI/PrimaryButton";
+import { useState } from "react";
+import { Colors } from "../constants/Colors";
 
-function StartGameScreen() {
+function StartGameScreen({ onPickNumber }) {
+  const [enteredNumber, setEnteredNumber] = useState("");
+
+  const numberInputHandler = function (inputValue) {
+    setEnteredNumber(inputValue);
+  };
+
+  const resetInputHandler = function () {
+    setEnteredNumber("");
+  };
+  const confirmInputHandler = function () {
+    //validation
+    const confirmNumber = parseInt(enteredNumber);
+
+    if (isNaN(confirmNumber) || confirmNumber <= 0 || confirmNumber > 99) {
+      Alert.alert(
+        "Invalid number!",
+        "Number has to be a number between 1 and 99",
+        [{ text: "Okay", style: "destructive", onPress: resetInputHandler }],
+        { cancelable: true }
+      );
+      return;
+    }
+
+    onPickNumber(confirmNumber);
+  };
+
+  // console.log(enteredNumber);
+
   return (
     <View style={styles.inputContainer}>
       <TextInput
@@ -9,10 +39,12 @@ function StartGameScreen() {
         maxLength={2}
         keyboardType="number-pad"
         inputMode="numeric"
+        value={enteredNumber}
+        onChangeText={numberInputHandler}
       />
       <View style={styles.buttonsContainer}>
-        <PrimaryButton>reset</PrimaryButton>
-        <PrimaryButton>confirm</PrimaryButton>
+        <PrimaryButton onPress={resetInputHandler}>reset</PrimaryButton>
+        <PrimaryButton onPress={confirmInputHandler}>confirm</PrimaryButton>
       </View>
     </View>
   );
@@ -20,7 +52,7 @@ function StartGameScreen() {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    backgroundColor: "#72063c",
+    backgroundColor: Colors.primary700,
     marginTop: 100,
     marginHorizontal: 25,
     borderRadius: 15,
@@ -32,27 +64,27 @@ const styles = StyleSheet.create({
     shadowColor: "black",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowRadius: 6,
     shadowOpacity: 0.2,
-    alignItems: "center",
+    alignItems: "center"
   },
 
   numberInput: {
     height: 50,
     width: 50,
-    color: "#ddb52f",
-    borderBottomColor: "#ddb52f",
+    color: Colors.accent500,
+    borderBottomColor: Colors.accent500,
     borderBottomWidth: 2,
     textAlign: "center",
-    fontSize: 32,
+    fontSize: 32
     // marginBottom: 20,
   },
 
   buttonsContainer: {
-    flexDirection: "row",
-  },
+    flexDirection: "row"
+  }
 });
 
 export default StartGameScreen;
