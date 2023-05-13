@@ -27,8 +27,8 @@ export default function App() {
   }
 
   if (isGameOver) {
-    screen = <GameOverScreen />;
   }
+  screen = <GameOverScreen />;
 
   return (
     <LinearGradient
